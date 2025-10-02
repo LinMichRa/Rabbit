@@ -1,0 +1,6 @@
+co\vinni\controller\ClienteController.class
+co\vinni\model\Cliente.class
+co\vinni\Main.class
+co\vinni\service\NotificacionConsumer.class
+co\vinni\service\ClienteService.class
+co\vinni\Producer.class

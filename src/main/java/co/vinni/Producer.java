@@ -44,9 +44,9 @@ public class Producer {
     }
     public static void sendMsgTopic(String message, String virtualHost, String exchangeName, String topic) throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
-
-
         factory.setHost(server);
+        factory.setVirtualHost("Act1");
+        
         if (virtualHost != null) {
             factory.setVirtualHost(virtualHost);
         }
