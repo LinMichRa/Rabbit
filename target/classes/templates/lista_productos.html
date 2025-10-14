@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Productos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #3a7bd5;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #3a7bd5;
+            color: white;
+        }
+
+        tr:hover {
+            background: #f1f1f1;
+        }
+
+        .actions a {
+            margin-right: 10px;
+            color: #3a7bd5;
+            text-decoration: none;
+        }
+
+        .actions a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Gestión de Productos</h1>
+
+<a class="btn" href="/admin/panel" style="background:#43c6ac; margin-right:10px;">&larr; Volver al Panel</a>
+<a class="btn" href="/admin/productos/nuevo">+ Nuevo Producto</a>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="producto : ${productos}">
+        <td th:text="${producto.id}">1</td>
+        <td th:text="${producto.nombre}">Nombre</td>
+        <td th:text="${producto.precio}">$100.00</td>
+        <td th:text="${producto.descripcion}">Descripción</td>
+        <td class="actions">
+            <a th:href="@{'/admin/productos/editar/' + ${producto.id}}">Editar</a>
+            <a th:href="@{'/admin/productos/eliminar/' + ${producto.id}}">Eliminar</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

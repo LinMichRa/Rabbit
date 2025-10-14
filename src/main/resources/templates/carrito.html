@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Carrito de Compras</title>
+    <style>
+        body {
+            background: #f4f7fb;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 2rem;
+            color: #333;
+        }
+        .carrito-container {
+            width: 80%;
+            margin: 2rem auto;
+            background: #fff;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+        th, td {
+            text-align: center;
+            padding: 12px;
+        }
+        th {
+            background: #3a7bd5;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background: #f1f1f1;
+        }
+        .btn-volver, .btn-comprar {
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s;
+            font-size: 1rem;
+        }
+        .btn-volver {
+            background: #888;
+            color: #fff;
+            margin-right: 1rem;
+        }
+        .btn-comprar {
+            background: #27ae60;
+            color: #fff;
+        }
+        .btn-volver:hover, .btn-comprar:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+<h1>Tu Carrito</h1>
+
+<div class="carrito-container" th:if="${not #lists.isEmpty(carrito)}">
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="item : ${carrito}">
+                <td th:text="${item.nombre}"></td>
+                <td th:text="'$' + ${item.precio}"></td>
+                <td th:text="${item.cantidad}"></td>
+                <td th:text="'$' + ${item.precio * item.cantidad}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="text-align: center;">
+        <a href="/clientes/catalogo" class="btn-volver">prando</a>
+        <a href="/clientes/checkout" class="btn-comprar">Proceder al Pago</a>
+    </div>
+</div>
+
+<div class="carrito-container" th:if="${#lists.isEmpty(carrito)}">
+    <h2 style="text-align: center; color: #555;">Tu carrito está vacío</h2>
+    <div style="text-align: center; margin-top: 1.5rem;">
+        <a href="/clientes/catalogo" class="btn-volver">Volver al catálogo</a>
+    </div>
+</div>
+
+</body>
+</html>

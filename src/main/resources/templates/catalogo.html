@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Productos</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            color: #3a7bd5;
+            margin-top: 2rem;
+        }
+        .catalogo-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+        }
+        .producto-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 1.5rem 2rem;
+            min-width: 260px;
+            max-width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+        .producto-card:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 8px 32px rgba(58,123,213,0.15);
+        }
+        .producto-nombre {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #3a7bd5;
+            margin-bottom: 0.5rem;
+        }
+        .producto-descripcion {
+            color: #555;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .producto-precio {
+            font-size: 1.1rem;
+            color: #27ae60;
+            font-weight: bold;
+            margin-bottom: 1.2rem;
+        }
+        .btn-carrito {
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(90deg, #3a7bd5 0%, #00d2ff 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(58,123,213,0.12);
+            transition: background 0.2s;
+        }
+        .btn-carrito:hover {
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+        }
+    </style>
+</head>
+<body>
+    <h1>Catálogo de Productos</h1>
+    <div class="catalogo-container">
+        <div class="producto-card" th:each="producto : ${productos}">
+            <div class="producto-nombre" th:text="${producto.nombre}"></div>
+            <div class="producto-descripcion" th:text="${producto.descripcion}"></div>
+            <div class="producto-precio" th:text="'$' + ${producto.precio}"></div>
+            <form th:action="@{/clientes/carrito/agregar}" method="post">
+                <input type="hidden" th:name="idProducto" th:value="${producto.id}"/>
+                <button type="submit" class="btn-carrito">Agregar al carrito</button>
+            </form>
+        </div>
+    </div>
+
+    <div style="max-width:600px;margin:2rem auto;padding:2rem;background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <h2 style="color:#3a7bd5;text-align:center;">Mi Carrito</h2>
+        <div th:if="${carrito != null and #lists.size(carrito) > 0}">
+            <table style="width:100%;margin-bottom:1.5rem;">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Quitar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="prod : ${carrito}">
+                        <td th:text="${prod.nombre}"></td>
+                        <td th:text="'$' + ${prod.precio}"></td>
+                        <td>
+                            <form th:action="@{/clientes/carrito/quitar}" method="post" style="display:inline;">
+                                <input type="hidden" th:name="idProducto" th:value="${prod.idProducto}"/>
+                                <button type="submit" style="background:#e74c3c;color:#fff;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;">Quitar</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <form th:action="@{/clientes/carrito/pagar}" method="post" style="text-align:center;">
+                <button type="submit" style="padding:0.8rem 2rem;background:linear-gradient(90deg,#27ae60 0%,#43c6ac 100%);color:#fff;border:none;border-radius:8px;font-size:1.1rem;font-weight:bold;cursor:pointer;">Pagar</button>
+            </form>
+        </div>
+        <div th:if="${carrito == null or #lists.size(carrito) == 0}" style="text-align:center;color:#888;">
+            <p>Tu carrito está vacío.</p>
+        </div>
+    </div>
+</body>
+</html>

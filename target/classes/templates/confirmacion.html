@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Compra Exitosa</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .contenedor {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            width: 400px;
+        }
+        .btn {
+            padding: 0.7rem 1.5rem;
+            margin-top: 1rem;
+            background: #3a7bd5;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<div class="contenedor">
+    <h1>¡Pago exitoso!</h1>
+    <p>Gracias por tu compra.</p>
+    <a href="/clientes/catalogo" class="btn">Volver al catálogo</a>
+</div>
+</body>
+</html>

@@ -36,9 +36,12 @@ public class Producer {
 
         try (Connection connection = factory.newConnection();
              Channel channel = connection.createChannel()) {
-
-            channel.queueDeclare(queueNameP, isVirtual, false, false, null);
-            channel.basicPublish("", queueNameP, null, message.getBytes(StandardCharsets.UTF_8));
+            // Cola durable
+            channel.queueDeclare(queueNameP, true, false, false, null);
+            // Mensaje persistente
+            channel.basicPublish("", queueNameP,
+                new com.rabbitmq.client.AMQP.BasicProperties.Builder().deliveryMode(2).build(),
+                message.getBytes(StandardCharsets.UTF_8));
             System.out.println(" [x] Sent '" + message + "'");
         }
     }

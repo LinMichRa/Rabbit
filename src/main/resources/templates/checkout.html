@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            padding: 20px;
+        }
+        .contenedor {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            margin-top: 1rem;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background: #3a7bd5;
+            color: white;
+        }
+        .total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 1rem;
+        }
+        .form-group {
+            margin-top: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        button {
+            margin-top: 1.5rem;
+            width: 100%;
+            padding: 12px;
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #1f8b4a;
+        }
+    </style>
+</head>
+<body>
+
+<div class="contenedor">
+    <h2>Resumen de Compra</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cant.</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="item : ${carrito}">
+                <td th:text="${item.nombre}"></td>
+                <td th:text="${item.cantidad}"></td>
+                <td th:text="'$' + ${item.precio}"></td>
+                <td th:text="'$' + ${item.precio * item.cantidad}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="total">
+        Total a pagar: <span th:text="'$' + ${total}"></span>
+    </div>
+
+    <form th:action="@{/clientes/procesar-pago}" method="post">
+        <div class="form-group">
+            <label>Nombre del titular</label>
+            <input type="text" placeholder="Ej: Juan Pérez" required>
+        </div>
+        <div class="form-group">
+            <label>Número de tarjeta</label>
+            <input type="text" placeholder="0000 1111 2222 3333" required>
+        </div>
+        <div class="form-group">
+            <label>Fecha de expiración</label>
+            <input type="text" placeholder="MM/AA" required>
+        </div>
+        <div class="form-group">
+            <label>CVC</label>
+            <input type="text" placeholder="123" required>
+        </div>
+        <button type="submit">Confirmar Pago</button>
+    </form>
+</div>
+
+</body>
+</html>
