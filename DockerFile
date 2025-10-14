@@ -1,3 +1,4 @@
+
 # Imagen base con JDK
 FROM openjdk:17-jdk-slim
 
