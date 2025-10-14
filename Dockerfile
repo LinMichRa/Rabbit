@@ -1,0 +1,14 @@
+
+# Imagen base con JDK
+FROM openjdk:17-jdk-slim
+
+# Crear carpeta y copiar el JAR generado
+WORKDIR /app
+
+COPY target/*.jar app.jar
+
+# Puerto expuesto por Render
+EXPOSE 8080
+
+# Comando para ejecutar el proyecto
+ENTRYPOINT ["java", "-jar", "app.jar"]
