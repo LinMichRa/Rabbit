@@ -2,8 +2,10 @@ package co.vinni.controller;
 
 import co.vinni.model.CarritoItem;
 import co.vinni.model.Cliente;
+import co.vinni.model.OrdenCompra;
 import co.vinni.model.Producto;
 import co.vinni.service.ClienteService;
+import co.vinni.service.OrdenCompraService;
 import co.vinni.service.ProductoService;
 import jakarta.servlet.http.HttpSession;
 
@@ -20,11 +22,13 @@ public class ClienteController {
 
     private final ClienteService clienteService;
     private final ProductoService productoService;
+    private final OrdenCompraService ordenCompraService;
 
-    // ✅ Constructor ÚNICO con ambos servicios
-    public ClienteController(ClienteService clienteService, ProductoService productoService) {
+    // ✅ Constructor con todos los servicios
+    public ClienteController(ClienteService clienteService, ProductoService productoService, OrdenCompraService ordenCompraService) {
         this.clienteService = clienteService;
         this.productoService = productoService;
+        this.ordenCompraService = ordenCompraService;
     }
 
     // ✅ Mostrar formulario de registro de cliente
@@ -137,13 +141,39 @@ public String checkout(Model model, HttpSession session) {
 }
 
     @PostMapping("/procesar-pago")
-    public String procesarPago(HttpSession session) {
+    public String procesarPago(@RequestParam String nombreTitular, 
+                              @RequestParam String numeroTarjeta,
+                              HttpSession session, 
+                              Model model) {
+        
+        // Obtener carrito de la sesión
+        @SuppressWarnings("unchecked")
+        List<CarritoItem> carrito = (List<CarritoItem>) session.getAttribute("carrito");
+        
+        if (carrito == null || carrito.isEmpty()) {
+            return "redirect:/clientes/carrito?empty=true";
+        }
+        
+        // Procesar la orden y enviar a RabbitMQ
+        OrdenCompra orden = ordenCompraService.procesarOrden(carrito, nombreTitular, numeroTarjeta);
+        
+        // Guardar orden en sesión para mostrar en confirmación
+        session.setAttribute("ultimaOrden", orden);
+        
+        // Limpiar carrito
         session.removeAttribute("carrito");
+        
         return "redirect:/clientes/confirmacion";
     }
 
     @GetMapping("/confirmacion")
-    public String confirmacion() {
+    public String confirmacion(HttpSession session, Model model) {
+        OrdenCompra ultimaOrden = (OrdenCompra) session.getAttribute("ultimaOrden");
+        if (ultimaOrden != null) {
+            model.addAttribute("orden", ultimaOrden);
+            // Limpiar la orden de la sesión después de mostrarla
+            session.removeAttribute("ultimaOrden");
+        }
         return "confirmacion";
     }
 

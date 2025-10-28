@@ -28,10 +28,17 @@ public class ProductoController {
         return "nuevo_producto";
     }
 
+    // Endpoint directo para el formulario (similar a /clientes/form)
+    @GetMapping("/form")
+    public String mostrarFormulario(Model model) {
+        model.addAttribute("producto", new Producto());
+        return "nuevo_producto";
+    }
+
     @PostMapping("/guardar")
     public String guardarProducto(Producto producto) {
         productoService.guardar(producto);
-        return "redirect:/admin/productos";
+        return "redirect:/admin/productos/nuevo?success=true";
     }
 
     @GetMapping("/editar/{id}")

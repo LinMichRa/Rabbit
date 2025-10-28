@@ -1,7 +1,10 @@
 co\vinni\service\ProductoService.class
 co\vinni\controller\ClienteController.class
 co\vinni\repositories\UsuarioRepository.class
+co\vinni\controller\ProductoPublicController.class
+co\vinni\service\OrdenCompraService.class
 co\vinni\Main.class
+co\vinni\model\OrdenCompra.class
 co\vinni\model\CarritoItem.class
 co\vinni\controller\LoginController.class
 co\vinni\service\NotificacionConsumer.class

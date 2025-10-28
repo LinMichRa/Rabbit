@@ -7,35 +7,112 @@
         body {
             font-family: Arial, sans-serif;
             background: #f4f7fb;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
+            padding: 20px;
         }
         .contenedor {
+            max-width: 600px;
+            margin: 2rem auto;
             background: white;
             padding: 2rem;
             border-radius: 12px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-            width: 400px;
+            text-align: center;
+        }
+        .success-icon {
+            font-size: 4rem;
+            color: #27ae60;
+            margin-bottom: 1rem;
+        }
+        .orden-details {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+        .orden-items {
+            margin-top: 1rem;
+        }
+        .item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #27ae60;
+            text-align: right;
+            margin-top: 1rem;
         }
         .btn {
             padding: 0.7rem 1.5rem;
-            margin-top: 1rem;
+            margin: 0.5rem;
             background: #3a7bd5;
             color: white;
             text-decoration: none;
             border-radius: 8px;
             display: inline-block;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #2765c2;
+        }
+        .btn-success {
+            background: #27ae60;
+        }
+        .btn-success:hover {
+            background: #1f8b4c;
+        }
+        .rabbit-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 1px solid #c3e6cb;
         }
     </style>
 </head>
 <body>
 <div class="contenedor">
-    <h1>¡Pago exitoso!</h1>
-    <p>Gracias por tu compra.</p>
-    <a href="/clientes/catalogo" class="btn">Volver al catálogo</a>
+    <div class="success-icon">✅</div>
+    <h1>¡Pago Procesado Exitosamente!</h1>
+    <p>Gracias por tu compra. Hemos recibido tu orden correctamente.</p>
+    
+    <!-- Mensaje de RabbitMQ -->
+    <div class="rabbit-message">
+        Tu orden ha sido enviada al sistema de procesamiento automático via RabbitMQ
+    </div>
+
+    <div th:if="${orden}" class="orden-details">
+        <h3>📋 Detalles de tu Orden #<span th:text="${orden.id}"></span></h3>
+        <p><strong>Titular:</strong> <span th:text="${orden.nombreTitular}"></span></p>
+        <p><strong>Tarjeta:</strong> <span th:text="${orden.numeroTarjeta}"></span></p>
+        <p><strong>Fecha:</strong> <span th:text="${#temporals.format(orden.fechaOrden, 'dd/MM/yyyy HH:mm')}"></span></p>
+        <p><strong>Estado:</strong> <span th:text="${orden.estado}" style="color: #27ae60; font-weight: bold;"></span></p>
+        
+        <div class="orden-items">
+            <h4>📦 Productos Comprados:</h4>
+            <div th:each="item : ${orden.items}" class="item">
+                <span th:text="${item.nombre} + ' x' + ${item.cantidad}"></span>
+                <span th:text="'$' + ${item.precio * item.cantidad}"></span>
+            </div>
+            <div class="total">
+                Total Pagado: $<span th:text="${orden.total}"></span>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${orden == null}">
+        <p>Tu orden ha sido procesada correctamente.</p>
+    </div>
+
+    <div>
+        <a href="/clientes/catalogo" class="btn">🛒 Seguir Comprando</a>
+        <a href="/clientes/perfil" class="btn btn-success">👤 Mi Perfil</a>
+    </div>
 </div>
 </body>
 </html>

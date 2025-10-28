@@ -70,6 +70,13 @@
 <body>
 <div class="container">
     <h1>Nuevo Producto</h1>
+    
+    <!-- Mensaje de éxito -->
+    <div th:if="${param.success}" style="background: #d4edda; color: #155724; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border: 1px solid #c3e6cb;">
+        ✅ Producto creado exitosamente y enviado a RabbitMQ!
+    </div>
+    
+    <!-- Formulario para crear producto -->
     <form action="/admin/productos/guardar" method="post" th:object="${producto}">
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" th:field="*{nombre}" required>
@@ -80,7 +87,7 @@
         <label for="descripcion">Descripción:</label>
         <textarea id="descripcion" th:field="*{descripcion}" rows="4"></textarea>
 
-        <button type="submit">Guardar</button>
+        <button type="submit">Guardar Producto</button>
     </form>
 
     <a class="back-link" href="/admin/productos">Volver</a>

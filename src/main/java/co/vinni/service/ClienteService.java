@@ -25,6 +25,8 @@ public class ClienteService {
         // 2. Enviar a RabbitMQ
         try {
             ObjectMapper mapper = new ObjectMapper();
+            // Registrar módulos para soporte completo de tipos de datos
+            mapper.findAndRegisterModules();
             String jsonMsg = mapper.writeValueAsString(cliente);
             Producer.sendMsg(jsonMsg, QUEUE, "Act1");
             System.out.println("Mensaje enviado a Rabbit: " + jsonMsg);
